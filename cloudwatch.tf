@@ -16,15 +16,25 @@ resource "aws_cloudwatch_event_target" "main" {
   arn       = var.cluster_arn
   role_arn  = var.role_arn
 
-  ecs_target {
-    task_count          = 1
-    task_definition_arn = local.task_definition_arn_only
-  }
-
   input = jsonencode({
     containerOverrides = [{
       name    = var.container_override_name,
       command = var.container_override_command
     }]
   })
+
+  ecs_target {
+    task_count          = 1
+    task_definition_arn = local.task_definition_arn_only
+  }
+
+  /*
+  dynamic "dead_letter_config" {
+    for_each = var.dead_letter_arn != "" ? [var.dead_letter_arn] : []
+
+    content {
+      arn = var.dead_letter_arn.value
+    }
+  }
+  */
 }

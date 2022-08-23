@@ -25,3 +25,8 @@ variable "container_override_name" {
 variable "container_override_command" {
   type = list(string)
 }
+
+variable "dead_letter_arn" {
+  type    = string
+  default = ""
+}
